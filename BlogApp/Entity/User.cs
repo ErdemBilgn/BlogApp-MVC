@@ -8,6 +8,8 @@ public class User
 
     public string? UserName { get; set; }
 
+    public string? Image { get; set; }
+
     public List<Post> Posts { get; set; } = [];
 
     public List<Comment> Comments { get; set; } = [];

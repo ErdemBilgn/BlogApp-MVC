@@ -37,15 +37,13 @@
                         }
 
                     </div>
+                    @if(User.Identity!.IsAuthenticated)
+                    {
                     <hr class="my-4">
                     <div>
                         <h4 class="mb-3">Add Comment</h4>
                         <form action="/posts/AddComment" method="post">
                             <input type="hidden" id="PostId" name="PostId" value="@Model.PostId">
-                            <div class="mb-3">
-                                <label for="UserName" class="form-label">UserName</label>
-                                <input type="text" name="UserName" id="UserName" class="form-control">
-                            </div>
                             <div class="mb-3">
                                 <label for="Text" class="form-label">Comment</label>
                                 <textarea type="text" name="Text" id="Text" rows="3" class="form-control"></textarea>
@@ -55,6 +53,12 @@
                             </div>
                         </form>
                     </div>
+                    }
+                    else
+                    {
+                    <p>You Must Login To Add A Comment. <a href="/users/login">Login</a></p>
+                    }
+
                 </div>
             </div>
         </div>
@@ -87,7 +91,7 @@
                     console.log(result);
                     $("#comments").append(`
                         <div class="my-4 d-flex">
-                            <img src="/img/${result.image}" class="avatar rounded-circle float-start me-3">
+                            <img src="/img/${result.avatar}" class="avatar rounded-circle float-start me-3">
                             <div>
                                 <div class="mb-2 d-flex">
                                     <h6 class="me-2">${result.userName}</h6>

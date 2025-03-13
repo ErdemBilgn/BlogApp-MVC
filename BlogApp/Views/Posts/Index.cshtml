@@ -12,10 +12,15 @@
                         <img src="~/img/@post.Image" class="img-fluid rounded">
                     </div>
                     <div class="col-8">
-                        <h5><a href="#" class="btn-link fw-bold">@post.Title</a></h5>
+                        <h5>
+                            <a href="/posts/@post.Url" class="btn-link fw-bold">@post.Title</a>
+                        </h5>
                         <p>@post.Content</p>
-                        <a href="#" class="badge bg-danger bg-opacity-10 text-danger mb-2 fw-bold">web
-                            development</a>
+                        @foreach(Tag tag in post.Tags)
+                        {
+                        <a href="/posts/tag/@tag.Url"
+                            class="badge bg-@tag.Color bg-opacity-10 text-@tag.Color mb-2 fw-bold">@tag.Text</a>
+                        }
                     </div>
                 </div>
             </div>

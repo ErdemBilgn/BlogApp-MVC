@@ -52,8 +52,8 @@ namespace BlogApp.Data.Concrete.EfCore
                             Image = "1.jpg",
                             UserId = 1,
                             Comments = new List<Comment>{
-                                new Comment { Text = "a good course", PublishedOn = new DateTime(), UserId = 1},
-                                new Comment { Text = "a very nice course", PublishedOn = new DateTime(), UserId = 2}
+                                new Comment { Text = "a good course", PublishedOn = DateTime.Now.AddDays(-20), UserId = 1},
+                                new Comment { Text = "a very nice course", PublishedOn = DateTime.Now.AddDays(-10), UserId = 2}
                             }
                         },
 

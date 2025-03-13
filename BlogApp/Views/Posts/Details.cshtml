@@ -18,22 +18,43 @@
         <div class="bg-white mt-4">
             <div class="card border-0">
                 <div class="card-header pb-0">
-                    <h4>@Model.Comments.Count() Comments</h4>
+                    <h4><span id="commentCount">@Model.Comments.Count()</span> Comments</h4>
                 </div>
                 <div class="card-body">
-                    @foreach(Comment comment in Model.Comments)
-                    {
-                    <div class="my-4 d-flex">
-                        <img src="/img/@comment.User.Image" class="avatar rounded-circle float-start me-3">
-                        <div>
-                            <div class="mb-2">
-                                <h6>@comment.User.UserName</h6>
-                                <span>@comment.PublishedOn</span>
+                    <div id="comments">
+                        @foreach(Comment comment in Model.Comments)
+                        {
+                        <div class="my-4 d-flex">
+                            <img src="/img/@comment.User.Image" class="avatar rounded-circle float-start me-3">
+                            <div>
+                                <div class="mb-2 d-flex">
+                                    <h6 class="me-2">@comment.User.UserName</h6>
+                                    <small>@comment.PublishedOn.ToString("d")</small>
+                                </div>
+                                <p>@comment.Text</p>
                             </div>
-                            <p>@comment.Text</p>
                         </div>
+                        }
+
                     </div>
-                    }
+                    <hr class="my-4">
+                    <div>
+                        <h4 class="mb-3">Add Comment</h4>
+                        <form action="/posts/AddComment" method="post">
+                            <input type="hidden" id="PostId" name="PostId" value="@Model.PostId">
+                            <div class="mb-3">
+                                <label for="UserName" class="form-label">UserName</label>
+                                <input type="text" name="UserName" id="UserName" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="Text" class="form-label">Comment</label>
+                                <textarea type="text" name="Text" id="Text" rows="3" class="form-control"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary" id="btnAddComment">Kaydet</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,3 +65,50 @@
     </div>
 
 </div>
+
+@section Scripts{
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    $(document).ready(() => {
+        $("#btnAddComment").click(() => {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddComment")',
+                dataType: "json",
+                data: {
+                    PostId: $("#PostId").val(),
+                    UserName: $("#UserName").val(),
+                    Text: $("#Text").val(),
+                },
+                success: (result) => {
+                    const date = new Date(result.publishedOn)
+                    console.log(result);
+                    $("#comments").append(`
+                        <div class="my-4 d-flex">
+                            <img src="/img/${result.image}" class="avatar rounded-circle float-start me-3">
+                            <div>
+                                <div class="mb-2 d-flex">
+                                    <h6 class="me-2">${result.userName}</h6>
+                                    <small>${date.toLocaleDateString()}</small>
+                                </div>
+                                <p>${result.text}</p>
+                            </div>
+                        </div>
+                    `);
+
+                    $("#UserName").val("");
+                    $("#Text").val("");
+
+                    const count = parseInt($("#commentCount").text());
+                    $("#commentCount").text(count + 1);
+                }
+            })
+
+            return false;
+        });
+
+    });
+</script>
+}
